@@ -7,3 +7,10 @@ exports.fetchUsers = () => {
     return rows;
   });
 };
+
+exports.fetchUserByUsername = (username) => {
+  const queryStr = `SELECT * from users WHERE username = $1;`;
+  return db.query(queryStr, [username]).then(({ rows }) => {
+    return rows;
+  });
+};

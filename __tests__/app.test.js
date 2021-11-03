@@ -162,7 +162,7 @@ describe("nc-news app", () => {
       return request(app).delete("/api/comments/18").expect(204);
     });
   });
-  describe.only("GET /api/users", () => {
+  describe("GET /api/users", () => {
     test("responds with status 200 and an array of users objects", () => {
       return request(app)
         .get("/api/users")
@@ -179,6 +179,24 @@ describe("nc-news app", () => {
               })
             );
           });
+        });
+    });
+  });
+  describe.only("GET /api/users/:username", () => {
+    test("respond with status 200 and a single user object", () => {
+      return request(app)
+        .get("/api/users/lurker")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toBeInstanceOf(Object);
+          expect(body.user).toHaveLength(1);
+          expect(body.user[0]).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              avatar_url: expect.any(String),
+              name: expect.any(String),
+            })
+          );
         });
     });
   });
