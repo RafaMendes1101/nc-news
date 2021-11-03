@@ -131,7 +131,7 @@ describe("nc-news app", () => {
         });
     });
   });
-  describe.only("POST /api/articles/:article_id/comments", () => {
+  describe("POST /api/articles/:article_id/comments", () => {
     test("status 201 responds with a new comment object", () => {
       const newComment = {
         body: "Blah blah blah gop26",
@@ -144,7 +144,6 @@ describe("nc-news app", () => {
         .send(newComment)
         .expect(201)
         .then(({ body }) => {
-          console.log(body);
           expect(body).toBeInstanceOf(Object);
           expect(body.newComment).toEqual(
             expect.objectContaining({
@@ -156,6 +155,11 @@ describe("nc-news app", () => {
             })
           );
         });
+    });
+  });
+  describe.only("DELETE /api/comments/:comment_id", () => {
+    test("responds with status 204", () => {
+      return request(app).delete("/api/comments/18").expect(204);
     });
   });
 });

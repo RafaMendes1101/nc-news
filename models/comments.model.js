@@ -14,3 +14,11 @@ exports.addComment = (data) => {
     return rows[0];
   });
 };
+
+exports.deleteComment = (id) => {
+  const queryStr = `DELETE FROM comments WHERE comment_id = $1;`;
+
+  return db.query(queryStr, [id]).then(({ rows }) => {
+    return rows;
+  });
+};

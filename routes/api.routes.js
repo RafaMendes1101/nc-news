@@ -3,6 +3,7 @@ const { getTopics } = require("../controllers/topics.controller");
 const {
   getComments,
   newComment,
+  removeComment,
 } = require("../controllers/comments.controller");
 const {
   getArticles,
@@ -17,5 +18,6 @@ apiRouter
 apiRouter
   .get("/articles/:article_id/comments", getComments)
   .post("/articles/:article_id/comments", newComment);
+apiRouter.delete("/comments/:comment_id", removeComment);
 
 module.exports = apiRouter;
