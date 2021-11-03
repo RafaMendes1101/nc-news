@@ -87,19 +87,17 @@ describe("nc-news app", () => {
   describe("PATCH /api/articles/:article_id", () => {
     test("status 200 returns updated article", () => {
       const updateArticle = {
-        title: "Updated title",
-        author: "rogersop",
+        inc_votes: 50,
       };
       return request(app)
-        .patch("/api/articles/1")
+        .patch("/api/articles/2")
         .send(updateArticle)
         .expect(200)
         .then(({ body }) => {
           expect(body).toBeInstanceOf(Object);
           expect(body).toEqual({
             updatedArticle: {
-              title: "Updated title",
-              author: "rogersop",
+              votes: 50,
               ...body.updatedArticle,
             },
           });
@@ -182,7 +180,7 @@ describe("nc-news app", () => {
         });
     });
   });
-  describe.only("GET /api/users/:username", () => {
+  describe("GET /api/users/:username", () => {
     test("respond with status 200 and a single user object", () => {
       return request(app)
         .get("/api/users/lurker")

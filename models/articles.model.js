@@ -12,19 +12,18 @@ exports.fetchArticles = (id) => {
 };
 
 exports.updateArticle = (id, data) => {
-  let queryStr = `UPDATE articles SET `;
-  let dataArray = Object.entries(data);
-  dataArray.forEach((e, i) => {
-    queryStr += `${e[0]} = '${e[1]}'`;
-    if (i + 1 < dataArray.length) {
-      queryStr += `, `;
-    }
-  });
-  queryStr += ` WHERE article_id = $1;`;
-
-  return db.query(queryStr, [id]).then(() => {
+  // console.log(data);
+  const articleToUpdate = `SELECT * FROM articles WHERE article_id = $1;`;
+  let updateObj = {};
+  return db.query(articleToUpdate, [id]).then(({ rows }) => {
+    rows[0].votes = rows[0].votes + data.inc_votes;
+    updateObj = rows[0];
+    const updateVotes = Object.values(updateObj)[3];
     return db
-      .query(`SELECT * from articles where article_id = $1`, [id])
+      .query(
+        `UPDATE articles SET votes = ${updateVotes} WHERE article_id = $1 RETURNING*;`,
+        [id]
+      )
       .then(({ rows }) => {
         return rows[0];
       });
