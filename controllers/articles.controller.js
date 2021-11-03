@@ -8,7 +8,9 @@ exports.getArticles = (req, res, next) => {
 };
 
 exports.updateArticle = (req, res, next) => {
-  updateArticle(req.params.article_id, req.body).then((updatedArticle) => {
-    res.status(200).send({ updatedArticle });
-  });
+  updateArticle(req.params.article_id, req.body)
+    .then((updatedArticle) => {
+      res.status(200).send({ updatedArticle });
+    })
+    .catch(next);
 };
