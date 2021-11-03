@@ -106,4 +106,29 @@ describe("nc-news app", () => {
         });
     });
   });
+  describe("GET /api/articles/:article_id/comments", () => {
+    test("status 200 responds with an article's comments", () => {
+      return request(app)
+        .get("/api/articles/3/comments")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toBeInstanceOf(Object);
+          expect(
+            body.comments.forEach((comment) => {
+              expect(comment).toBeInstanceOf(Object);
+              expect(comment).toEqual(
+                expect.objectContaining({
+                  body: expect.any(String),
+                  votes: expect.any(Number),
+                  author: expect.any(String),
+                  article_id: expect.any(Number),
+                  comment_id: expect.any(Number),
+                  created_at: expect.any(String),
+                })
+              );
+            })
+          );
+        });
+    });
+  });
 });
