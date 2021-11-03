@@ -77,7 +77,7 @@ const seed = (data) => {
     })
     .then(() => {
       const insertArticlesQuery = format(
-        `INSERT INTO articles(title,topic,body,author,created_at) VALUES %L RETURNING*;`,
+        `INSERT INTO articles(title,topic,body,author,created_at,votes) VALUES %L RETURNING*;`,
         articleData.map((article) => {
           return [
             article.title,
@@ -85,6 +85,7 @@ const seed = (data) => {
             article.body,
             article.author,
             article.created_at,
+            article.votes,
           ];
         })
       );
