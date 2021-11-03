@@ -6,3 +6,11 @@ exports.fetchComments = (article_id) => {
     return rows;
   });
 };
+
+exports.addComment = (data) => {
+  const queryStr = `INSERT into comments (body, votes, author, article_id) VALUES ($1, $2, $3, $4) RETURNING*;`;
+  const queryData = [data.body, data.votes, data.author, data.article_id];
+  return db.query(queryStr, queryData).then(({ rows }) => {
+    return rows[0];
+  });
+};

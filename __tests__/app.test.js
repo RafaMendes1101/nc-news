@@ -131,4 +131,31 @@ describe("nc-news app", () => {
         });
     });
   });
+  describe.only("POST /api/articles/:article_id/comments", () => {
+    test("status 201 responds with a new comment object", () => {
+      const newComment = {
+        body: "Blah blah blah gop26",
+        votes: 100,
+        author: "lurker",
+        article_id: 3,
+      };
+      return request(app)
+        .post("/api/articles/3/comments")
+        .send(newComment)
+        .expect(201)
+        .then(({ body }) => {
+          console.log(body);
+          expect(body).toBeInstanceOf(Object);
+          expect(body.newComment).toEqual(
+            expect.objectContaining({
+              body: expect.any(String),
+              votes: expect.any(Number),
+              author: expect.any(String),
+              article_id: expect.any(Number),
+              created_at: expect.any(String),
+            })
+          );
+        });
+    });
+  });
 });
