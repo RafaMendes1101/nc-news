@@ -9,9 +9,10 @@ const {
   getArticles,
   updateArticle,
 } = require("../controllers/articles.controller");
-
+const { getUsers } = require("../controllers/users.controller");
 apiRouter.get("/topics", getTopics);
 apiRouter.get("/articles", getArticles);
+apiRouter.get("/users", getUsers);
 apiRouter
   .get("/articles/:article_id", getArticles)
   .patch("/articles/:article_id", updateArticle);
