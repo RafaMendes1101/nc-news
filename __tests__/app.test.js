@@ -37,7 +37,7 @@ describe("nc-news app", () => {
         });
     });
   });
-  describe("GET /api/articles", () => {
+  describe.only("GET /api/articles", () => {
     test("status 200 responds with an array of articles", () => {
       return request(app)
         .get("/api/articles")
@@ -58,6 +58,14 @@ describe("nc-news app", () => {
               })
             );
           });
+        });
+    });
+    test("status 200 order by date descending", () => {
+      return request(app)
+        .get("/api/articles?sort=article_id&&order=asc")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).toBeSortedBy("article_id", { ascending: true });
         });
     });
     test("status 404 reponds with Invalid route msg object when passed an invalid route", () => {
@@ -133,9 +141,7 @@ describe("nc-news app", () => {
     test("status 201 responds with a new comment object", () => {
       const newComment = {
         body: "Blah blah blah gop26",
-        votes: 100,
         author: "lurker",
-        article_id: 3,
       };
       return request(app)
         .post("/api/articles/3/comments")
