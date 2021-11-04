@@ -13,7 +13,7 @@ exports.getComments = (req, res, next) => {
 };
 
 exports.newComment = (req, res, next) => {
-  addComment(req.body)
+  addComment(req.params.article_id, req.body)
     .then((comment) => {
       res.status(201).send({ newComment: comment });
     })
