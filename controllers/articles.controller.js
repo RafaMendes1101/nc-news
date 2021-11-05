@@ -1,8 +1,8 @@
 const { fetchArticles, updateArticle } = require("../models/articles.model");
 exports.getArticles = (req, res, next) => {
-  let { sort, order } = req.query;
+  let { sort, order, topic } = req.query;
 
-  fetchArticles(req.params.article_id, sort, order)
+  fetchArticles(req.params.article_id, sort, order, topic)
     .then((articles) => {
       if (articles.length < 1) {
         return Promise.reject({ status: 404, msg: "Article not found." });

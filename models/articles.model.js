@@ -1,12 +1,20 @@
 const db = require("../db/connection");
 
-exports.fetchArticles = (id, sort = "created_at", order = "desc") => {
+exports.fetchArticles = (
+  id,
+  sort = "created_at",
+  order = "desc",
+  topic = "mitch"
+) => {
   let queryStr = `SELECT * FROM articles`;
   const queryParams = [];
 
   if (id !== undefined) {
     queryStr += ` WHERE article_id = $1`;
     queryParams.push(id);
+  } else {
+    queryStr += ` WHERE topic = $1`;
+    queryParams.push(topic);
   }
   queryStr += ` ORDER BY ${sort} ${order.toUpperCase()};`;
 

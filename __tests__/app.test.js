@@ -47,7 +47,7 @@ describe("nc-news app", () => {
         });
     });
   });
-  describe.only("GET /api/articles", () => {
+  describe("GET /api/articles", () => {
     test("status 200 responds with an array of articles", () => {
       return request(app)
         .get("/api/articles")
@@ -76,6 +76,15 @@ describe("nc-news app", () => {
         .expect(200)
         .then(({ body }) => {
           expect(body.articles).toBeSortedBy("article_id", { ascending: true });
+        });
+    });
+    test("status 200 accepts a topic query and responds with an array of topic objects", () => {
+      return request(app)
+        .get("/api/articles?topic=cats")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).toHaveLength(1);
+          expect(body).toBeInstanceOf(Object);
         });
     });
     test("status 400 responds with Invalid sort param", () => {
