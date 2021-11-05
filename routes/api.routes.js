@@ -4,6 +4,7 @@ const {
   getComments,
   newComment,
   removeComment,
+  updateComment,
 } = require("../controllers/comments.controller");
 const {
   getArticles,
@@ -20,6 +21,8 @@ apiRouter
 apiRouter
   .get("/articles/:article_id/comments", getComments)
   .post("/articles/:article_id/comments", newComment);
-apiRouter.delete("/comments/:comment_id", removeComment);
+apiRouter
+  .delete("/comments/:comment_id", removeComment)
+  .patch("/comments/:comment_id", updateComment);
 
 module.exports = apiRouter;

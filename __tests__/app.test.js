@@ -37,7 +37,7 @@ describe("nc-news app", () => {
         });
     });
   });
-  describe.only("GET /api/articles", () => {
+  describe("GET /api/articles", () => {
     test("status 200 responds with an array of articles", () => {
       return request(app)
         .get("/api/articles")
@@ -78,6 +78,7 @@ describe("nc-news app", () => {
         .get("/api/articles/3")
         .expect(200)
         .then(({ body }) => {
+          console.log(body);
           expect(body.articles).toBeInstanceOf(Array);
           expect(body.articles).toHaveLength(1);
           expect(body.articles[0].article_id).toEqual(3);
@@ -98,10 +99,11 @@ describe("nc-news app", () => {
         inc_votes: 50,
       };
       return request(app)
-        .patch("/api/articles/2")
+        .patch("/api/articles/3")
         .send(updateArticle)
         .expect(200)
         .then(({ body }) => {
+          console.log(body);
           expect(body).toBeInstanceOf(Object);
           expect(body).toEqual({
             updatedArticle: {
@@ -118,6 +120,7 @@ describe("nc-news app", () => {
         .get("/api/articles/3/comments")
         .expect(200)
         .then(({ body }) => {
+          console.log(body);
           expect(body).toBeInstanceOf(Object);
           expect(
             body.comments.forEach((comment) => {
@@ -148,6 +151,7 @@ describe("nc-news app", () => {
         .send(newComment)
         .expect(201)
         .then(({ body }) => {
+          console.log(body);
           expect(body).toBeInstanceOf(Object);
           expect(body.newComment).toEqual(
             expect.objectContaining({
@@ -192,6 +196,7 @@ describe("nc-news app", () => {
         .get("/api/users/lurker")
         .expect(200)
         .then(({ body }) => {
+          console.log(body);
           expect(body).toBeInstanceOf(Object);
           expect(body.user).toHaveLength(1);
           expect(body.user[0]).toEqual(
@@ -201,6 +206,26 @@ describe("nc-news app", () => {
               name: expect.any(String),
             })
           );
+        });
+    });
+  });
+  describe.only("PATCH /api/comments/:comment_id", () => {
+    test("status 200 returns updated article", () => {
+      const updateComment = {
+        inc_votes: 65,
+      };
+      return request(app)
+        .patch("/api/comments/3")
+        .send(updateComment)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toBeInstanceOf(Object);
+          expect(body).toEqual({
+            updatedComment: {
+              votes: 65,
+              ...body.updatedComment,
+            },
+          });
         });
     });
   });

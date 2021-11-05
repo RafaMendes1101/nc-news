@@ -2,6 +2,7 @@ const {
   fetchComments,
   addComment,
   deleteComment,
+  updateComment,
 } = require("../models/comments.model");
 
 exports.getComments = (req, res, next) => {
@@ -24,6 +25,14 @@ exports.removeComment = (req, res, next) => {
   deleteComment(req.params.comment_id)
     .then((removedComment) => {
       res.status(204).send(removedComment);
+    })
+    .catch(next);
+};
+
+exports.updateComment = (req, res, next) => {
+  updateComment(req.params.comment_id, req.body)
+    .then((updatedComment) => {
+      res.status(200).send({ updatedComment });
     })
     .catch(next);
 };
