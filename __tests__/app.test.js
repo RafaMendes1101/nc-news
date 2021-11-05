@@ -47,7 +47,7 @@ describe("nc-news app", () => {
         });
     });
   });
-  describe("GET /api/articles", () => {
+  describe.only("GET /api/articles", () => {
     test("status 200 responds with an array of articles", () => {
       return request(app)
         .get("/api/articles")
@@ -70,12 +70,29 @@ describe("nc-news app", () => {
           });
         });
     });
-    test("status 200 order by date descending", () => {
+    test("status 200 order by article_id descending", () => {
       return request(app)
         .get("/api/articles?sort=article_id&&order=asc")
         .expect(200)
         .then(({ body }) => {
           expect(body.articles).toBeSortedBy("article_id", { ascending: true });
+        });
+    });
+    test("status 400 responds with Invalid sort param", () => {
+      return request(app)
+        .get("/api/articles?sort=banana")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid sort value banana");
+        });
+    });
+    test("status 400 responds with Invalid order ", () => {
+      return request(app)
+        .get("/api/articles?order=banana")
+        .expect(400)
+        .then(({ body }) => {
+          console.log(body);
+          expect(body.msg).toBe("Invalid order value banana");
         });
     });
     test("status 404 reponds with Invalid route msg object when passed an invalid route", () => {
@@ -98,13 +115,13 @@ describe("nc-news app", () => {
         .get("/api/articles/invalid")
         .expect(400)
         .then(({ body }) => {
-          expect(body.msg).toBe("Invalid query.");
+          expect(body.msg).toBe("Invalid request.");
         });
     });
-    test("status 400 responds with Article not found when passed an non existent article_id", () => {
+    test("status 404 responds with Article not found when passed an non existent article_id", () => {
       return request(app)
         .get("/api/articles/99")
-        .expect(400)
+        .expect(404)
         .then(({ body }) => {
           expect(body.msg).toBe("Article not found.");
         });
@@ -129,13 +146,13 @@ describe("nc-news app", () => {
           });
         });
     });
-    test("status 400 returns article not found message", () => {
+    test("status 404 returns article not found message", () => {
       return request(app)
         .patch("/api/articles/99")
-        .expect(400)
+        .expect(404)
         .then(({ body }) => {
           expect(body).toBeInstanceOf(Object);
-          expect(body.msg).toBe("Article not found");
+          expect(body.msg).toBe("Article not found.");
         });
     });
   });
@@ -250,10 +267,10 @@ describe("nc-news app", () => {
           });
         });
     });
-    test("return status 400 if comment not found", () => {
+    test("return status 404 if comment not found", () => {
       return request(app)
         .patch("/api/comments/99")
-        .expect(400)
+        .expect(404)
         .then(({ body }) => {
           expect(body).toBeInstanceOf(Object);
           expect(body.msg).toBe("Comment not found");
