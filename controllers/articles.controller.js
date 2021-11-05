@@ -3,8 +3,8 @@ exports.getArticles = (req, res, next) => {
   let { sort, order } = req.query;
   fetchArticles(req.params.article_id, sort, order)
     .then((articles) => {
-      if (articles === "Article not found.") {
-        return Promise.reject({ status: 400, msg: articles });
+      if (articles.length < 1) {
+        return Promise.reject({ status: 400, msg: "Article not found." });
       } else {
         res.status(200).send({ articles });
       }
@@ -15,8 +15,8 @@ exports.getArticles = (req, res, next) => {
 exports.updateArticle = (req, res, next) => {
   updateArticle(req.params.article_id, req.body)
     .then((updatedArticle) => {
-      if (updatedArticle === "Article not found") {
-        return Promise.reject({ status: 400, msg: "Article not found" });
+      if (updatedArticle.article_id === undefined) {
+        return Promise.reject({ status: 400, msg: "Article not found." });
       } else {
         res.status(200).send({ updatedArticle });
       }
