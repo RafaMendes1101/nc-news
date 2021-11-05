@@ -32,7 +32,7 @@ exports.removeComment = (req, res, next) => {
 exports.updateComment = (req, res, next) => {
   updateComment(req.params.comment_id, req.body)
     .then((updatedComment) => {
-      if (updatedComment === "Comment not found.") {
+      if (updatedComment.length < 1) {
         return Promise.reject({ status: 400, msg: "Comment not found" });
       } else {
         res.status(200).send({ updatedComment });

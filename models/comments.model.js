@@ -27,8 +27,8 @@ exports.updateComment = (id, data) => {
   const commentToUpdate = `SELECT * FROM articles WHERE article_id = $1;`;
   let updateObj = {};
   return db.query(commentToUpdate, [id]).then(({ rows }) => {
-    if (rows.length === 0) {
-      return "Comment not found.";
+    if (rows.length < 1) {
+      return rows;
     } else {
       rows[0].votes = rows[0].votes + data.inc_votes;
       updateObj = rows[0];
