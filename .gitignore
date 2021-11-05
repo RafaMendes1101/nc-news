@@ -1,2 +1,5 @@
 node_modules
 .env.*
+hosting.md
+error-handling.md
+README.md
