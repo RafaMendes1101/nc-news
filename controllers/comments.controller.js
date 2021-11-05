@@ -8,7 +8,11 @@ const {
 exports.getComments = (req, res, next) => {
   fetchComments(req.params.article_id)
     .then((comments) => {
-      res.status(200).send({ comments });
+      if (comments.length < 1) {
+        res.status(200).send({ msg: "No comments on this article." });
+      } else {
+        res.status(200).send({ comments });
+      }
     })
     .catch(next);
 };

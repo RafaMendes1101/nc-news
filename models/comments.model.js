@@ -2,8 +2,15 @@ const db = require("../db/connection");
 
 exports.fetchComments = (article_id) => {
   const queryStr = `SELECT * from comments WHERE article_id = $1;`;
-  return db.query(queryStr, [article_id]).then(({ rows }) => {
-    return rows;
+  const articlesStr = `SELECT * FROM articles WHERE article_id = $1;`;
+  return db.query(articlesStr, [article_id]).then(({ rows }) => {
+    if (rows.length < 1) {
+      return Promise.reject({ status: 404, msg: "Article not found." });
+    } else {
+      return db.query(queryStr, [article_id]).then(({ rows }) => {
+        return rows;
+      });
+    }
   });
 };
 

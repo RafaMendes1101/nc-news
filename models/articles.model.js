@@ -4,15 +4,15 @@ exports.fetchArticles = (
   id,
   sort = "created_at",
   order = "desc",
-  topic = "mitch"
+  topic = ""
 ) => {
   let queryStr = `SELECT * FROM articles`;
   const queryParams = [];
-
+  // console.log(topic);
   if (id !== undefined) {
     queryStr += ` WHERE article_id = $1`;
     queryParams.push(id);
-  } else {
+  } else if (topic !== "") {
     queryStr += ` WHERE topic = $1`;
     queryParams.push(topic);
   }

@@ -87,6 +87,14 @@ describe("nc-news app", () => {
           expect(body).toBeInstanceOf(Object);
         });
     });
+    test("status 404 responds with Article not found.", () => {
+      return request(app)
+        .get("/api/articles?topic=csgo")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Article not found.");
+        });
+    });
     test("status 400 responds with Invalid sort param", () => {
       return request(app)
         .get("/api/articles?sort=banana")
@@ -100,7 +108,6 @@ describe("nc-news app", () => {
         .get("/api/articles?order=banana")
         .expect(400)
         .then(({ body }) => {
-          console.log(body);
           expect(body.msg).toBe("Invalid order value banana");
         });
     });
@@ -187,6 +194,30 @@ describe("nc-news app", () => {
               );
             })
           );
+        });
+    });
+    test("status 400 responds with invalid id", () => {
+      return request(app)
+        .get("/api/articles/not-id/comments")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid request.");
+        });
+    });
+    test("status 404 return article not found message", () => {
+      return request(app)
+        .get("/api/articles/99/comments")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Article not found.");
+        });
+    });
+    test("status 200, found article but no comments", () => {
+      return request(app)
+        .get("/api/articles/2/comments")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.msg).toBe("No comments on this article.");
         });
     });
   });
