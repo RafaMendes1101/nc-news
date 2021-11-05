@@ -78,7 +78,6 @@ describe("nc-news app", () => {
         .get("/api/articles/3")
         .expect(200)
         .then(({ body }) => {
-          console.log(body);
           expect(body.articles).toBeInstanceOf(Array);
           expect(body.articles).toHaveLength(1);
           expect(body.articles[0].article_id).toEqual(3);
@@ -117,7 +116,6 @@ describe("nc-news app", () => {
         .patch("/api/articles/99")
         .expect(400)
         .then(({ body }) => {
-          console.log(body);
           expect(body).toBeInstanceOf(Object);
           expect(body.msg).toBe("Article not found");
         });
@@ -129,7 +127,6 @@ describe("nc-news app", () => {
         .get("/api/articles/3/comments")
         .expect(200)
         .then(({ body }) => {
-          console.log(body);
           expect(body).toBeInstanceOf(Object);
           expect(
             body.comments.forEach((comment) => {
@@ -160,7 +157,6 @@ describe("nc-news app", () => {
         .send(newComment)
         .expect(201)
         .then(({ body }) => {
-          console.log(body);
           expect(body).toBeInstanceOf(Object);
           expect(body.newComment).toEqual(
             expect.objectContaining({
@@ -205,7 +201,6 @@ describe("nc-news app", () => {
         .get("/api/users/lurker")
         .expect(200)
         .then(({ body }) => {
-          console.log(body);
           expect(body).toBeInstanceOf(Object);
           expect(body.user).toHaveLength(1);
           expect(body.user[0]).toEqual(
@@ -228,7 +223,6 @@ describe("nc-news app", () => {
         .send(updateComment)
         .expect(200)
         .then(({ body }) => {
-          console.log(body);
           expect(body).toBeInstanceOf(Object);
           expect(body).toEqual({
             updatedComment: {
