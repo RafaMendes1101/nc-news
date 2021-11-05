@@ -1,6 +1,10 @@
 exports.handle400 = (err, req, res, next) => {
   if (err) {
-    res.status(400).send({ msg: "Article not found" });
+    if (err.code === "22P02") {
+      res.status(400).send({ msg: "Invalid query." });
+    } else {
+      res.status(400).send({ msg: err.msg });
+    }
   } else {
     next(err);
   }

@@ -3,7 +3,11 @@ exports.getArticles = (req, res, next) => {
   let { sort, order } = req.query;
   fetchArticles(req.params.article_id, sort, order)
     .then((articles) => {
-      res.status(200).send({ articles });
+      if (articles === "Article not found.") {
+        return Promise.reject({ status: 400, msg: articles });
+      } else {
+        res.status(200).send({ articles });
+      }
     })
     .catch(next);
 };

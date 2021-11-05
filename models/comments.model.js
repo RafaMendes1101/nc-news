@@ -24,20 +24,23 @@ exports.deleteComment = (id) => {
 };
 
 exports.updateComment = (id, data) => {
-  // console.log(data);
   const commentToUpdate = `SELECT * FROM articles WHERE article_id = $1;`;
   let updateObj = {};
   return db.query(commentToUpdate, [id]).then(({ rows }) => {
-    rows[0].votes = rows[0].votes + data.inc_votes;
-    updateObj = rows[0];
-    const updateVotes = Object.values(updateObj)[3];
-    return db
-      .query(
-        `UPDATE articles SET votes = ${updateVotes} WHERE article_id = $1 RETURNING*;`,
-        [id]
-      )
-      .then(({ rows }) => {
-        return rows[0];
-      });
+    if (rows.length === 0) {
+      return "Comment not found.";
+    } else {
+      rows[0].votes = rows[0].votes + data.inc_votes;
+      updateObj = rows[0];
+      const updateVotes = Object.values(updateObj)[3];
+      return db
+        .query(
+          `UPDATE articles SET votes = ${updateVotes} WHERE article_id = $1 RETURNING*;`,
+          [id]
+        )
+        .then(({ rows }) => {
+          return rows[0];
+        });
+    }
   });
 };

@@ -6,11 +6,13 @@ const {
   removeComment,
   updateComment,
 } = require("../controllers/comments.controller");
+const { getEndpointsJson } = require("../controllers/api.controller");
 const {
   getArticles,
   updateArticle,
 } = require("../controllers/articles.controller");
 const { getUsers, getUser } = require("../controllers/users.controller");
+apiRouter.get("/", getEndpointsJson);
 apiRouter.get("/topics", getTopics);
 apiRouter.get("/articles", getArticles);
 apiRouter.get("/users", getUsers);

@@ -3,6 +3,7 @@ const db = require("../db/connection");
 exports.fetchArticles = (id, sort = "created_at", order = "desc") => {
   let queryStr = `SELECT * FROM articles`;
   const queryParams = [];
+
   if (id !== undefined) {
     queryStr += ` WHERE article_id = $1`;
     queryParams.push(id);
@@ -10,7 +11,11 @@ exports.fetchArticles = (id, sort = "created_at", order = "desc") => {
   queryStr += ` ORDER BY ${sort} ${order.toUpperCase()};`;
 
   return db.query(queryStr, queryParams).then(({ rows }) => {
-    return rows;
+    if (rows.length === 0) {
+      return "Article not found.";
+    } else {
+      return rows;
+    }
   });
 };
 

@@ -18,6 +18,16 @@ describe("nc-news app", () => {
       });
     });
   });
+  describe("GET /api", () => {
+    test("responds with endpoins.json file content", () => {
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toBeInstanceOf(Object);
+        });
+    });
+  });
   describe("GET /api/topics", () => {
     test("status 200 responds with an array of topics", () => {
       return request(app)
@@ -83,12 +93,20 @@ describe("nc-news app", () => {
           expect(body.articles[0].article_id).toEqual(3);
         });
     });
-    test("status 400 responds with article not found msg object when passed an invalid article_id", () => {
+    test("status 400 responds with Invalid query msg object when passed an invalid article_id", () => {
       return request(app)
         .get("/api/articles/invalid")
         .expect(400)
         .then(({ body }) => {
-          expect(body.msg).toBe("Article not found");
+          expect(body.msg).toBe("Invalid query.");
+        });
+    });
+    test("status 400 responds with Article not found when passed an non existent article_id", () => {
+      return request(app)
+        .get("/api/articles/99")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Article not found.");
         });
     });
   });
@@ -230,6 +248,15 @@ describe("nc-news app", () => {
               ...body.updatedComment,
             },
           });
+        });
+    });
+    test("return status 400 if comment not found", () => {
+      return request(app)
+        .patch("/api/comments/99")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body).toBeInstanceOf(Object);
+          expect(body.msg).toBe("Comment not found");
         });
     });
   });
