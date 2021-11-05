@@ -103,7 +103,6 @@ describe("nc-news app", () => {
         .send(updateArticle)
         .expect(200)
         .then(({ body }) => {
-          console.log(body);
           expect(body).toBeInstanceOf(Object);
           expect(body).toEqual({
             updatedArticle: {
@@ -111,6 +110,16 @@ describe("nc-news app", () => {
               ...body.updatedArticle,
             },
           });
+        });
+    });
+    test("status 400 returns article not found message", () => {
+      return request(app)
+        .patch("/api/articles/99")
+        .expect(400)
+        .then(({ body }) => {
+          console.log(body);
+          expect(body).toBeInstanceOf(Object);
+          expect(body.msg).toBe("Article not found");
         });
     });
   });
@@ -209,7 +218,7 @@ describe("nc-news app", () => {
         });
     });
   });
-  describe.only("PATCH /api/comments/:comment_id", () => {
+  describe("PATCH /api/comments/:comment_id", () => {
     test("status 200 returns updated article", () => {
       const updateComment = {
         inc_votes: 65,
@@ -219,6 +228,7 @@ describe("nc-news app", () => {
         .send(updateComment)
         .expect(200)
         .then(({ body }) => {
+          console.log(body);
           expect(body).toBeInstanceOf(Object);
           expect(body).toEqual({
             updatedComment: {

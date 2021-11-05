@@ -1,5 +1,5 @@
 exports.handle400 = (err, req, res, next) => {
-  if (err.code) {
+  if (err) {
     res.status(400).send({ msg: "Article not found" });
   } else {
     next(err);

@@ -6,10 +6,10 @@ const app = express();
 app.use(express.json());
 app.use("/api", apiRouter);
 
+app.use(handle400);
+app.use(handle500);
 app.use("/*", (req, res) => {
   res.status(404).send({ msg: "Invalid route" });
 });
 
-app.use(handle400);
-app.use(handle500);
 module.exports = app;

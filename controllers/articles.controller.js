@@ -11,7 +11,11 @@ exports.getArticles = (req, res, next) => {
 exports.updateArticle = (req, res, next) => {
   updateArticle(req.params.article_id, req.body)
     .then((updatedArticle) => {
-      res.status(200).send({ updatedArticle });
+      if (updatedArticle === "Article not found") {
+        return Promise.reject({ status: 400, msg: "Article not found" });
+      } else {
+        res.status(200).send({ updatedArticle });
+      }
     })
     .catch(next);
 };
