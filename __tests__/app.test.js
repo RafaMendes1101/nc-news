@@ -356,7 +356,7 @@ describe("nc-news app", () => {
         });
     });
   });
-  describe.only("GET /api/users/:username", () => {
+  describe("GET /api/users/:username", () => {
     test("respond with status 200 and a single user object", () => {
       return request(app)
         .get("/api/users/lurker")
@@ -408,6 +408,13 @@ describe("nc-news app", () => {
         .then(({ body }) => {
           expect(body).toBeInstanceOf(Object);
           expect(body.msg).toBe("Comment not found");
+        });
+    });
+    test("status 400 responds with Invalid id msg", () => {
+      return request(app)
+        .patch("/api/comments/invalid-id")
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid request.");
         });
     });
   });
