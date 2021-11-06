@@ -7,7 +7,9 @@
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
     "seed-test": "node ./db/seeds/run-seed.js",
-    "test": "jest"
+    "seed:prod": "NODE_ENV=production DATABASE_URL=postgres://qmkmlbzkfrkzsu:bcf43e8885dacee8949f861834dc9d0ee3369a3379704668a3567137ac1151a2@ec2-3-212-194-162.compute-1.amazonaws.com:5432/d9ba1hjlvsnp7c npm run seed",
+    "test": "jest",
+    "start": "node listen.js"
   },
   "repository": {
     "type": "git",
