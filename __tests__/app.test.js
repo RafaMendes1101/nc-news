@@ -245,7 +245,7 @@ describe("nc-news app", () => {
           );
         });
     });
-    test("status 404 return article not found message", () => {
+    test("status 404 responds with article not found message", () => {
       const newComment = {
         body: "Blah blah blah gop26",
         author: "lurker",
@@ -258,7 +258,20 @@ describe("nc-news app", () => {
           expect(body.msg).toBe("Article not found.");
         });
     });
-    test("status 400 return Invalid id msg", () => {
+    test("status 404 responds with Username doesn't exist", () => {
+      const newComment = {
+        body: "Blah blah blah gop26",
+        author: "modern_doomsayer",
+      };
+      return request(app)
+        .post("/api/articles/:article_id/comments")
+        .send(newComment)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Username doesn't exist.");
+        });
+    });
+    test("status 400 responds with Invalid id msg", () => {
       const newComment = {
         body: "Blah blah blah gop26",
         author: "lurker",
@@ -269,6 +282,36 @@ describe("nc-news app", () => {
         .expect(400)
         .then(({ body }) => {
           expect(body.msg).toBe("Invalid request.");
+        });
+    });
+    test("status 400 responds with Missing required fields msg", () => {
+      const newComment = { author: "rogersop" };
+      return request(app)
+        .post("/api/articles/:article_id/comments")
+        .send(newComment)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Missing required field body.");
+        });
+    });
+    test("status 400 responds with Missing required fields msg", () => {
+      const newComment = { body: "We all gonna diiiie!" };
+      return request(app)
+        .post("/api/articles/:article_id/comments")
+        .send(newComment)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Missing required field author.");
+        });
+    });
+    test("status 400 responds with Missing required fields msg", () => {
+      const newComment = {};
+      return request(app)
+        .post("/api/articles/:article_id/comments")
+        .send(newComment)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Missing required field author and body.");
         });
     });
   });
