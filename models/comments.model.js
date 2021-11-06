@@ -17,8 +17,30 @@ exports.fetchComments = (article_id) => {
 exports.addComment = (id, data) => {
   const queryStr = `INSERT into comments (body, author, article_id) VALUES ($1, $2, $3 ) RETURNING*;`;
   const queryData = [data.body, data.author, id];
-  return db.query(queryStr, queryData).then(({ rows }) => {
-    return rows[0];
+
+  if (!data.body && !data.author) {
+    return Promise.reject({
+      status: 400,
+      msg: "Missing required field author and body.",
+    });
+  } else if (!data.body) {
+    return Promise.reject({ status: 400, msg: "Missing required field body." });
+  } else if (!data.author) {
+    return Promise.reject({
+      status: 400,
+      msg: "Missing required field author.",
+    });
+  }
+  const checkUser = `SELECT * from users where username = $1;`;
+
+  return db.query(checkUser, [data.author]).then(({ rows }) => {
+    if (rows.length < 1) {
+      return Promise.reject({ status: 404, msg: "Username doesn't exist." });
+    } else {
+      return db.query(queryStr, queryData).then(({ rows }) => {
+        return rows[0];
+      });
+    }
   });
 };
 
