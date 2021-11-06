@@ -11,6 +11,10 @@ exports.fetchUsers = () => {
 exports.fetchUserByUsername = (username) => {
   const queryStr = `SELECT * from users WHERE username = $1;`;
   return db.query(queryStr, [username]).then(({ rows }) => {
-    return rows;
+    if (rows.length < 1) {
+      return Promise.reject({ status: 404, msg: "User not found." });
+    } else {
+      return rows;
+    }
   });
 };

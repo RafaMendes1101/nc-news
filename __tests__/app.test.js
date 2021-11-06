@@ -315,7 +315,7 @@ describe("nc-news app", () => {
         });
     });
   });
-  describe.only("DELETE /api/comments/:comment_id", () => {
+  describe("DELETE /api/comments/:comment_id", () => {
     test("responds with status 204", () => {
       return request(app).delete("/api/comments/18").expect(204);
     });
@@ -356,7 +356,7 @@ describe("nc-news app", () => {
         });
     });
   });
-  describe("GET /api/users/:username", () => {
+  describe.only("GET /api/users/:username", () => {
     test("respond with status 200 and a single user object", () => {
       return request(app)
         .get("/api/users/lurker")
@@ -371,6 +371,14 @@ describe("nc-news app", () => {
               name: expect.any(String),
             })
           );
+        });
+    });
+    test("status 404 responds with User not found msg object", () => {
+      return request(app)
+        .get("/api/users/rafa")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("User not found.");
         });
     });
   });
