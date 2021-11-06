@@ -17,7 +17,7 @@ exports.updateArticle = (req, res, next) => {
   updateArticle(req.params.article_id, req.body)
     .then((updatedArticle) => {
       if (updatedArticle.article_id === undefined) {
-        return Promise.reject({ status: 400, msg: "Article not found." });
+        return Promise.reject({ status: 404, msg: "Article not found." });
       } else {
         res.status(200).send({ updatedArticle });
       }
