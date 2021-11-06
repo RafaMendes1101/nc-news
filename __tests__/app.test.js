@@ -3,6 +3,7 @@ const testData = require("../db/data/test-data/index.js");
 const seed = require("../db/seeds/seed.js");
 const request = require("supertest");
 const app = require("../app.js");
+const { newComment } = require("../controllers/comments.controller.js");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -242,6 +243,32 @@ describe("nc-news app", () => {
               created_at: expect.any(String),
             })
           );
+        });
+    });
+    test("status 404 return article not found message", () => {
+      const newComment = {
+        body: "Blah blah blah gop26",
+        author: "lurker",
+      };
+      return request(app)
+        .post("/api/articles/99/comments")
+        .send(newComment)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Article not found.");
+        });
+    });
+    test("status 400 return Invalid id msg", () => {
+      const newComment = {
+        body: "Blah blah blah gop26",
+        author: "lurker",
+      };
+      return request(app)
+        .post("/api/articles/invalid-id/comments")
+        .send(newComment)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid request.");
         });
     });
   });
