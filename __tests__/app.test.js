@@ -315,9 +315,25 @@ describe("nc-news app", () => {
         });
     });
   });
-  describe("DELETE /api/comments/:comment_id", () => {
+  describe.only("DELETE /api/comments/:comment_id", () => {
     test("responds with status 204", () => {
       return request(app).delete("/api/comments/18").expect(204);
+    });
+    test("status 404 responds with Comments doesn't exist msg", () => {
+      return request(app)
+        .delete("/api/comments/99")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Comment doesn't exist.");
+        });
+    });
+    test("status 400 responds with Invalid id msg", () => {
+      return request(app)
+        .delete("/api/comments/not-id")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Invalid request.");
+        });
     });
   });
   describe("GET /api/users", () => {

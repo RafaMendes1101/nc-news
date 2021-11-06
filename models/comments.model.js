@@ -46,9 +46,16 @@ exports.addComment = (id, data) => {
 
 exports.deleteComment = (id) => {
   const queryStr = `DELETE FROM comments WHERE comment_id = $1;`;
+  const checkComment = `SELECT * FROM comments WHERE comment_id =$1;`;
 
-  return db.query(queryStr, [id]).then(({ rows }) => {
-    return rows;
+  return db.query(checkComment, [id]).then(({ rows }) => {
+    if (rows.length < 1) {
+      return Promise.reject({ status: 404, msg: "Comment doesn't exist." });
+    } else {
+      return db.query(queryStr, [id]).then(({ rows }) => {
+        return rows;
+      });
+    }
   });
 };
 
